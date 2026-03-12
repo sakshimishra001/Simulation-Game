@@ -1,0 +1,2753 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Orion Mobiles | Executive Simulation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+
+<style>
+
+/* ================= BASE ================= */
+
+:root{
+--bg:#070C1A;
+--card:#0F172A;
+--accent:#2563EB;
+--text:#E5E7EB;
+--muted:#94A3B8;
+--border:#1E293B;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+font-family:'Inter',sans-serif;
+background:var(--bg);
+color:var(--text);
+min-height:100vh;
+}
+
+/* ================= HEADER ================= */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 60px;
+border-bottom:1px solid var(--border);
+}
+
+.logo{
+font-family:'Orbitron',sans-serif;
+font-size:22px;
+letter-spacing:2px;
+color:#60A5FA;
+}
+
+.logo span{color:white;}
+
+.user-area{
+display:flex;
+align-items:center;
+gap:16px;
+}
+
+.user-info{
+text-align:right;
+font-size:13px;
+}
+
+.timer{color:var(--muted);}
+
+.avatar{
+width:38px;
+height:38px;
+border-radius:50%;
+background:linear-gradient(135deg,#2563EB,#3B82F6);
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:600;
+}
+
+/* ================= MAIN NAV ================= */
+
+.main-nav{
+display:flex;
+gap:40px;
+padding:14px 60px;
+border-bottom:1px solid var(--border);
+}
+
+.main-nav div{
+cursor:pointer;
+color:var(--muted);
+font-weight:500;
+}
+
+.main-nav .active{
+color:white;
+border-bottom:2px solid var(--accent);
+padding-bottom:6px;
+}
+
+/* ================= STEP NAV ================= */
+
+.step-nav{
+display:flex;
+gap:35px;
+padding:18px 60px;
+border-bottom:1px solid var(--border);
+}
+
+.step{
+display:flex;
+align-items:center;
+gap:8px;
+font-size:14px;
+color:var(--muted);
+cursor:pointer;
+}
+
+.step-circle{
+width:22px;
+height:22px;
+border-radius:50%;
+border:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+}
+
+.step.active{color:white;}
+.step.active .step-circle{
+background:var(--accent);
+border-color:var(--accent);
+}
+
+.step.locked{opacity:0.4;cursor:not-allowed;}
+
+/* ================= CONTENT ================= */
+
+.content{
+padding:40px 60px 60px 60px;  /* Reduced top spacing */
+max-width:1200px;
+margin:auto;
+}
+
+/* ================= INTRO HERO ================= */
+
+.intro-hero{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:60px;
+margin-bottom:60px;
+}
+
+.hero-left{
+flex:1;
+}
+
+.hero-left h1{
+font-size:42px;
+margin-bottom:10px;
+}
+
+.hero-left h2{
+font-size:14px;
+letter-spacing:2px;
+color:var(--accent);
+margin-bottom:20px;
+text-transform:uppercase;
+}
+
+.hero-left p{
+color:var(--muted);
+line-height:1.7;
+margin-bottom:14px;
+}
+
+.hero-right{
+flex:1;
+display:flex;
+justify-content:center;
+position:relative;
+}
+
+/* Animated Phone */
+
+/* ===== PREMIUM REALISTIC PHONE ===== */
+
+.phone-wrapper{
+position:relative;
+width:260px;
+height:520px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.phone{
+width:240px;
+height:500px;
+border-radius:40px;
+background:linear-gradient(145deg,#0f172a,#1e293b);
+box-shadow:
+0 40px 80px rgba(0,0,0,0.7),
+inset 0 0 0 2px #1f2937;
+position:relative;
+overflow:hidden;
+animation:floatPhone 6s ease-in-out infinite;
+}
+
+.phone::before{
+content:'';
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:35px;
+background:#0b1220;
+border-bottom-left-radius:20px;
+border-bottom-right-radius:20px;
+}
+
+.phone-screen{
+position:absolute;
+top:45px;
+left:12px;
+right:12px;
+bottom:12px;
+border-radius:30px;
+background:
+radial-gradient(circle at 30% 30%,#3b82f6,transparent 40%),
+linear-gradient(180deg,#1d4ed8,#2563eb);
+overflow:hidden;
+}
+
+.phone-screen::after{
+content:'';
+position:absolute;
+top:-50%;
+left:-50%;
+width:200%;
+height:200%;
+background:linear-gradient(
+120deg,
+transparent 40%,
+rgba(255,255,255,0.15) 50%,
+transparent 60%
+);
+transform:rotate(25deg);
+animation:shine 4s infinite;
+}
+
+.phone-glow{
+position:absolute;
+width:280px;
+height:280px;
+background:radial-gradient(circle,#2563eb 0%,transparent 70%);
+filter:blur(80px);
+z-index:-1;
+animation:pulseGlow 4s ease-in-out infinite;
+}
+
+@keyframes floatPhone{
+0%{transform:translateY(0);}
+50%{transform:translateY(-18px);}
+100%{transform:translateY(0);}
+}
+
+@keyframes shine{
+0%{transform:translateX(-100%) rotate(25deg);}
+100%{transform:translateX(100%) rotate(25deg);}
+}
+
+@keyframes pulseGlow{
+0%{opacity:0.6;transform:scale(1);}
+50%{opacity:0.3;transform:scale(1.1);}
+100%{opacity:0.6;transform:scale(1);}
+}
+
+/* ================= FLOW ================= */
+
+.flow-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+margin-bottom:50px;
+}
+
+.flow-card{
+background:var(--card);
+padding:25px;
+border-radius:16px;
+border:1px solid var(--border);
+transition:0.3s;
+}
+
+.flow-card:hover{
+transform:translateY(-6px);
+border-color:var(--accent);
+box-shadow:0 20px 40px rgba(37,99,235,0.25);
+}
+
+.flow-card h3{
+margin-bottom:8px;
+}
+
+.flow-card p{
+font-size:13px;
+color:var(--muted);
+}
+
+/* ================= CTA ================= */
+
+.intro-cta{
+text-align:center;
+}
+
+.primary-btn{
+padding:16px 45px;
+border:none;
+border-radius:14px;
+background:linear-gradient(90deg,#2563EB,#3B82F6);
+color:white;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+}
+
+.primary-btn:hover{
+transform:translateY(-4px);
+box-shadow:0 20px 40px rgba(37,99,235,0.4);
+}
+
+/* ================= LOGIN ================= */
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.75);
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.modal-box{
+background:#111827;
+padding:40px;
+border-radius:16px;
+width:360px;
+border:1px solid var(--border);
+}
+
+.input-field{
+width:100%;
+padding:12px;
+margin-bottom:16px;
+border-radius:8px;
+border:1px solid var(--border);
+background:#0F172A;
+color:white;
+}
+
+.hidden{display:none;}
+.market-wrapper{
+margin-top:20px;
+}
+
+.market-title{
+font-size:28px;
+margin-bottom:30px;
+text-align:center;
+}
+
+.kpi-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+margin-bottom:50px;
+}
+
+.kpi-card{
+background:linear-gradient(145deg,#111827,#1F2937);
+padding:25px;
+border-radius:16px;
+border:1px solid #1E293B;
+text-align:center;
+transition:0.3s;
+}
+
+.kpi-card:hover{
+transform:translateY(-6px);
+border-color:#2563EB;
+box-shadow:0 20px 40px rgba(37,99,235,0.25);
+}
+
+.kpi-label{
+font-size:13px;
+color:#94A3B8;
+margin-bottom:8px;
+}
+
+.kpi-value{
+font-size:32px;
+font-weight:700;
+color:#3B82F6;
+}
+
+.kpi-sub{
+font-size:12px;
+color:#64748B;
+margin-top:5px;
+}
+
+.chart-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:30px;
+margin-bottom:40px;
+}
+
+.chart-card{
+background:#0F172A;
+padding:20px;
+border-radius:16px;
+border:1px solid #1E293B;
+}
+
+.market-context{
+background:#0F172A;
+padding:20px;
+border-radius:12px;
+border-left:4px solid #2563EB;
+color:#94A3B8;
+line-height:1.7;
+}
+.strategy-wrapper{
+margin-top:20px;
+}
+
+.strategy-title{
+font-size:28px;
+margin-bottom:40px;
+text-align:center;
+}
+
+.strategy-block{
+background:#0F172A;
+padding:30px;
+border-radius:18px;
+border:1px solid #1E293B;
+margin-bottom:40px;
+}
+
+.strategy-sub{
+color:#94A3B8;
+margin-bottom:20px;
+}
+
+.priority-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:25px;
+}
+
+.priority-item{
+display:flex;
+flex-direction:column;
+}
+
+.priority-item label{
+margin-bottom:6px;
+color:#CBD5E1;
+font-size:14px;
+}
+
+.priority-slider{
+width:100%;
+}
+
+.priority-value{
+margin-top:5px;
+font-weight:600;
+color:#3B82F6;
+}
+
+.allocation-status{
+margin-top:20px;
+font-weight:600;
+color:#3B82F6;
+}
+
+.pie-container{
+max-width:350px;
+margin:30px auto;
+}
+
+.archetype-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+}
+
+.archetype-card{
+padding:20px;
+border-radius:14px;
+background:#111827;
+border:1px solid #1E293B;
+cursor:pointer;
+text-align:center;
+transition:0.3s;
+}
+
+.archetype-card:hover{
+border-color:#2563EB;
+transform:translateY(-4px);
+}
+
+.archetype-card.active{
+background:#1D4ED8;
+border-color:#1D4ED8;
+}
+
+.target-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;
+}
+
+.target-grid input{
+padding:10px;
+background:#0B1220;
+border:1px solid #1E293B;
+border-radius:8px;
+color:white;
+}
+.token-total{
+font-weight:600;
+margin-bottom:20px;
+color:#3B82F6;
+}
+
+.token-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:25px;
+}
+
+.token-card{
+background:linear-gradient(145deg,#0F172A,#111827);
+padding:25px;
+border-radius:16px;
+border:1px solid #1E293B;
+transition:0.3s;
+}
+
+.token-card:hover{
+border-color:#2563EB;
+transform:translateY(-4px);
+}
+
+.token-controls{
+display:flex;
+align-items:center;
+gap:10px;
+margin:15px 0;
+}
+
+.token-controls button{
+width:32px;
+height:32px;
+background:#1E293B;
+border:none;
+border-radius:6px;
+color:white;
+cursor:pointer;
+font-size:18px;
+}
+
+.token-controls input{
+width:60px;
+text-align:center;
+background:#0B1220;
+border:1px solid #1E293B;
+border-radius:6px;
+color:white;
+padding:5px;
+}
+
+.token-bar{
+height:8px;
+background:#1E293B;
+border-radius:6px;
+overflow:hidden;
+}
+
+.token-fill{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#2563EB,#3B82F6);
+transition:0.3s;
+}
+
+.donut-container{
+max-width:400px;
+margin:40px auto 0;
+}
+
+.allocation-wrapper{
+background:#0F172A;
+padding:30px;
+border-radius:18px;
+border:1px solid #1E293B;
+}
+
+.rice-table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+.rice-table th,
+.rice-table td{
+padding:12px;
+text-align:center;
+border-bottom:1px solid #1E293B;
+}
+
+.rice-table select,
+.rice-table input{
+background:#0B1220;
+border:1px solid #1E293B;
+border-radius:6px;
+color:white;
+padding:6px;
+width:90px;
+text-align:center;
+}
+
+.portfolio-score{
+margin-top:20px;
+font-size:18px;
+font-weight:600;
+color:#3B82F6;
+}
+
+.chart-container{
+margin-top:30px;
+max-width:600px;
+}
+/* ===== INTRO DOSSIER ===== */
+
+.intro-dossier{
+padding:50px 80px;
+max-width:1200px;
+margin:auto;
+}
+
+.confidential-tag{
+font-size:12px;
+letter-spacing:2px;
+color:#3B82F6;
+margin-bottom:15px;
+}
+
+.dossier-title{
+font-size:42px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.dossier-sub{
+color:#64748B;
+margin-bottom:50px;
+}
+
+/* ===== TIMELINE ===== */
+
+.timeline-container{
+position:relative;
+padding-left:40px;
+margin-bottom:60px;
+}
+
+.timeline-line{
+position:absolute;
+left:10px;
+top:0;
+bottom:0;
+width:2px;
+background:linear-gradient(#2563EB,#1E293B);
+}
+
+.timeline-item{
+margin-bottom:40px;
+position:relative;
+animation:fadeUp 0.8s ease forwards;
+}
+
+.timeline-item .year{
+font-weight:700;
+color:#3B82F6;
+display:block;
+margin-bottom:6px;
+}
+
+.timeline-item h3{
+margin-bottom:8px;
+}
+
+.timeline-item p{
+color:#94A3B8;
+}
+
+.timeline-item.decline h3{
+color:#EF4444;
+}
+
+/* ===== DECLINE VISUAL ===== */
+
+.decline-visual{
+background:#0F172A;
+padding:25px;
+border-radius:16px;
+border:1px solid #1E293B;
+margin-bottom:60px;
+}
+
+/* ===== CRISIS BLOCK ===== */
+
+.crisis-block{
+background:#111827;
+padding:30px;
+border-left:4px solid #EF4444;
+border-radius:12px;
+margin-bottom:50px;
+}
+
+.crisis-block ul{
+margin-top:15px;
+color:#94A3B8;
+line-height:1.8;
+}
+
+/* ===== MANDATE ===== */
+
+.mandate-block{
+background:#0F172A;
+padding:30px;
+border-left:4px solid #3B82F6;
+border-radius:12px;
+margin-bottom:40px;
+}
+
+.mandate-block p{
+color:#CBD5E1;
+line-height:1.8;
+}
+
+/* ===== ANIMATION ===== */
+
+@keyframes fadeUp{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1; transform:translateY(0);}
+}
+.narrative-wrapper{
+max-width:850px;
+margin:80px auto;
+padding:0 20px;
+line-height:1.9;
+}
+
+.narrative-header{
+margin-bottom:40px;
+}
+
+.confidential{
+font-size:12px;
+letter-spacing:2px;
+color:#3B82F6;
+display:block;
+margin-bottom:15px;
+}
+
+.narrative-header h1{
+font-size:40px;
+margin-bottom:10px;
+font-weight:700;
+}
+
+.subtitle{
+color:#64748B;
+}
+
+.narrative-body p{
+margin-bottom:22px;
+color:#CBD5E1;
+font-size:17px;
+}
+
+.narrative-body p:nth-child(4),
+.narrative-body p:nth-child(10){
+font-weight:600;
+color:white;
+}
+
+.narrative-cta{
+margin-top:40px;
+text-align:center;
+}
+/* ===== HERO ===== */
+
+.story-hero{
+height:80vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+background:radial-gradient(circle at center, #1E293B 0%, #070C1A 70%);
+padding:0 20px;
+}
+
+.hero-content h1{
+font-size:64px;
+margin-bottom:10px;
+}
+
+.hero-content h2{
+color:#3B82F6;
+margin-bottom:20px;
+}
+
+.story-tag{
+font-size:12px;
+letter-spacing:3px;
+color:#64748B;
+display:block;
+margin-bottom:20px;
+}
+
+/* ===== STORY BLOCKS ===== */
+
+.story-block{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:60px;
+padding:100px 80px;
+max-width:1200px;
+margin:auto;
+}
+
+.story-block.reverse{
+flex-direction:row-reverse;
+}
+
+.story-text{
+flex:1;
+}
+
+.story-text h3{
+font-size:28px;
+margin-bottom:15px;
+}
+
+.story-text p{
+color:#CBD5E1;
+margin-bottom:15px;
+line-height:1.8;
+}
+
+.story-visual{
+flex:1;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* ===== METRIC GLOW ===== */
+
+.metric-glow{
+width:180px;
+height:180px;
+border-radius:50%;
+background:radial-gradient(circle,#2563EB 0%, transparent 70%);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+animation:pulseGlow 4s infinite;
+}
+
+.metric-glow span{
+font-size:40px;
+font-weight:700;
+}
+
+.metric-glow p{
+font-size:12px;
+color:#CBD5E1;
+}
+
+@keyframes pulseGlow{
+0%{transform:scale(1); opacity:0.8;}
+50%{transform:scale(1.1); opacity:0.4;}
+100%{transform:scale(1); opacity:0.8;}
+}
+
+/* ===== PULSE GRAPHIC ===== */
+
+.pulse-graphic{
+width:200px;
+height:200px;
+border-radius:50%;
+background:radial-gradient(circle,#3B82F6 0%, transparent 70%);
+animation:float 6s ease-in-out infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0);}
+50%{transform:translateY(-15px);}
+100%{transform:translateY(0);}
+}
+
+/* ===== QUOTE ===== */
+
+.quote-section{
+text-align:center;
+padding:120px 20px;
+background:#0F172A;
+}
+
+.quote-section blockquote{
+font-size:28px;
+font-weight:600;
+margin-bottom:20px;
+}
+
+.quote-section span{
+color:#64748B;
+}
+
+/* ===== MANDATE ===== */
+
+.story-mandate{
+padding:120px 80px;
+max-width:900px;
+margin:auto;
+text-align:center;
+}
+
+/* ===== FADE ANIMATION ===== */
+
+.fade-in{
+opacity:0;
+transform:translateY(40px);
+transition:all 1s ease;
+}
+
+.fade-in.visible{
+opacity:1;
+transform:translateY(0);
+}
+.industry-context{
+padding:140px 20px;
+background:#0F172A;
+text-align:center;
+}
+
+.context-container{
+max-width:1000px;
+margin:auto;
+}
+
+.context-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:40px;
+margin:60px 0;
+}
+
+.context-card{
+background:linear-gradient(145deg,#111827,#1F2937);
+padding:40px;
+border-radius:18px;
+border:1px solid #1E293B;
+transition:0.3s;
+}
+
+.context-card:hover{
+transform:translateY(-8px);
+border-color:#2563EB;
+}
+
+.context-number{
+font-size:42px;
+font-weight:700;
+color:#3B82F6;
+}
+
+.context-note{
+color:#94A3B8;
+max-width:700px;
+margin:auto;
+}
+.company-profile{
+padding:140px 20px;
+background:#0B1220;
+}
+
+.profile-container{
+max-width:1100px;
+margin:auto;
+text-align:center;
+}
+
+.profile-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:40px;
+margin:60px 0;
+}
+
+.profile-item{
+background:#111827;
+padding:30px;
+border-radius:16px;
+border:1px solid #1E293B;
+transition:0.3s;
+}
+
+.profile-item:hover{
+transform:translateY(-6px);
+border-color:#2563EB;
+}
+
+.profile-item span{
+display:block;
+font-size:13px;
+color:#94A3B8;
+margin-bottom:8px;
+}
+
+.profile-item strong{
+font-size:22px;
+}
+
+.profile-note{
+color:#94A3B8;
+max-width:700px;
+margin:auto;
+}
+.revenue-structure{
+padding:140px 20px;
+background:#070C1A;
+}
+
+.revenue-container{
+max-width:900px;
+margin:auto;
+}
+
+.revenue-bars{
+margin:50px 0;
+}
+
+.rev-bar{
+margin-bottom:30px;
+}
+
+.rev-bar span{
+display:block;
+margin-bottom:8px;
+color:#CBD5E1;
+}
+
+.bar{
+background:#1E293B;
+height:12px;
+border-radius:8px;
+overflow:hidden;
+}
+
+.bar div{
+height:100%;
+background:linear-gradient(90deg,#2563EB,#3B82F6);
+}
+.revenue-evolution{
+padding:140px 20px;
+background:#070C1A;
+text-align:center;
+}
+
+.rev-container{
+max-width:1100px;
+margin:auto;
+}
+
+.rev-comparison{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:40px;
+margin:60px 0;
+}
+
+.rev-card{
+background:linear-gradient(145deg,#111827,#1F2937);
+padding:40px;
+border-radius:20px;
+border:1px solid #1E293B;
+transition:0.3s;
+}
+
+.rev-card:hover{
+transform:translateY(-8px);
+border-color:#2563EB;
+}
+
+.rev-card span{
+display:block;
+font-size:14px;
+color:#94A3B8;
+margin-bottom:10px;
+}
+
+.rev-card strong{
+font-size:36px;
+display:block;
+margin-bottom:10px;
+}
+
+.rev-card p{
+font-size:14px;
+color:#CBD5E1;
+}
+
+.rev-note{
+color:#94A3B8;
+max-width:700px;
+margin:auto;
+}
+.reports-wrapper{
+padding:60px 20px;
+max-width:1100px;
+margin:auto;
+}
+
+.reports-title{
+text-align:center;
+margin-bottom:50px;
+}
+
+.score-summary{
+display:flex;
+justify-content:center;
+gap:80px;
+margin-bottom:60px;
+}
+
+.score-card{
+background:#111827;
+padding:30px 60px;
+border-radius:16px;
+border:1px solid #1E293B;
+text-align:center;
+}
+
+.score-card strong{
+font-size:48px;
+color:#3B82F6;
+display:block;
+margin-top:10px;
+}
+
+.report-table{
+width:100%;
+border-collapse:collapse;
+margin:30px 0 60px 0;
+}
+
+.report-table th,
+.report-table td{
+border:1px solid #1E293B;
+padding:12px;
+text-align:center;
+}
+
+.report-table th{
+background:#0F172A;
+}
+
+.report-chart{
+max-width:700px;
+margin:60px auto;
+}
+
+.verdict-box{
+background:#0F172A;
+padding:40px;
+border-radius:18px;
+border-left:6px solid #2563EB;
+line-height:1.8;
+}
+.modal-box{
+max-height:80vh;
+overflow-y:auto;
+}
+
+.chart-card{
+background:linear-gradient(145deg,#0F172A,#111827);
+padding:28px;
+border-radius:18px;
+border:1px solid #1E293B;
+position:relative;
+transition:0.3s;
+}
+
+.chart-card:hover{
+transform:translateY(-6px);
+border-color:#2563EB;
+box-shadow:0 20px 40px rgba(37,99,235,0.25);
+}
+
+.chart-title{
+font-size:14px;
+letter-spacing:1px;
+color:#94A3B8;
+margin-bottom:15px;
+text-transform:uppercase;
+}
+
+.chart-card canvas{
+height:240px !important;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="modal" id="loginModal">
+  <div class="modal-box">
+    <h2 style="margin-bottom:20px;">Enter Simulation</h2>
+    <input class="input-field" id="nameInput" placeholder="Full Name">
+    <input class="input-field" id="emailInput" placeholder="Email Address">
+    <button class="primary-btn" onclick="startSimulation()">Enter</button>
+  </div>
+</div>
+<!-- GUIDELINES MODAL -->
+
+<div class="modal hidden" id="guidelinesModal">
+
+  <div class="modal-box" style="max-width:600px">
+
+    <h2 style="margin-bottom:20px;">Simulation Guidelines</h2>
+
+    <div style="color:#CBD5E1; line-height:1.7; font-size:14px">
+
+      <p><strong>Purpose</strong></p>
+      <p>
+      This simulation places you in the role of Product Strategy Lead at Orion Mobiles.
+      Your objective is to evaluate the company's position and determine how limited
+      strategic resources should be allocated to improve performance.
+      </p>
+
+      <br>
+
+      <p><strong>Simulation Structure</strong></p>
+      <ul style="margin-left:20px;">
+        <li>Review the company background and market context</li>
+        <li>Analyze current performance indicators</li>
+        <li>Define strategic priorities and objectives</li>
+        <li>Allocate capital to potential initiatives</li>
+        <li>Review the resulting strategic performance report</li>
+      </ul>
+
+      <br>
+
+      <p><strong>Decision Principles</strong></p>
+      <ul style="margin-left:20px;">
+        <li>Engineering capacity and capital are limited</li>
+        <li>Strategic trade-offs are required</li>
+        <li>Prioritization should align with your declared strategy</li>
+        <li>Fragmentation of resources reduces effectiveness</li>
+      </ul>
+
+      <br>
+
+      <p><strong>Evaluation Overview</strong></p>
+      <p>
+      Your final performance will be assessed using multiple factors including
+      strategic coherence, capital prioritization, and outcome projections.
+      Decisions that demonstrate clear focus and disciplined allocation
+      typically produce stronger results.
+      </p>
+
+      <br>
+
+      <p><strong>Important Notes</strong></p>
+      <ul style="margin-left:20px;">
+        <li>The simulation should be completed in one session.</li>
+        <li>Once submitted, strategic decisions cannot be changed.</li>
+        <li>Results are generated based on the consistency between your strategy and your allocation choices.</li>
+      </ul>
+
+    </div>
+
+    <div style="text-align:center;margin-top:25px;">
+      <button class="primary-btn" onclick="closeGuidelines()">
+        I Understand
+      </button>
+    </div>
+
+  </div>
+
+</div>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">ORION <span>MOBILES</span></div>
+  <div class="user-area">
+    <div class="user-info">
+      <div id="userDisplay"></div>
+      <div class="timer">Time Left: <span id="timer">60:00</span></div>
+    </div>
+    <div class="avatar" id="avatarInitial"></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="main-nav">
+  <div class="active" onclick="showGameArena(this)">Game Arena</div>
+  <div onclick="showLeaderboard(this)">Leaderboard</div>
+</div>
+
+<!-- STEP NAV -->
+<div class="step-nav">
+  <div class="step active" data-step="0"><div class="step-circle">1</div>Introduction</div>
+  <div class="step locked" data-step="1"><div class="step-circle">2</div>Market</div>
+  <div class="step locked" data-step="2"><div class="step-circle">3</div>Strategy</div>
+  <div class="step locked" data-step="3"><div class="step-circle">4</div>Allocation</div>
+  <div class="step locked" data-step="4"><div class="step-circle">5</div>Reports</div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- INTRO -->
+<div class="step-section" id="section0">
+
+<!-- HERO -->
+<section class="story-hero">
+  <div class="hero-content">
+    <span class="story-tag">CONFIDENTIAL STRATEGIC REVIEW</span>
+    <h1>Orion Mobiles</h1>
+    <h2>A Company Drifting from Discipline to Dilution</h2>
+  </div>
+</section>
+<!-- COMPANY PROFILE SNAPSHOT -->
+<section class="company-profile fade-in">
+
+  <div class="profile-container">
+
+    <h3>Orion Mobiles — Corporate Profile</h3>
+
+    <div class="profile-grid">
+
+      <div class="profile-item">
+        <span>Founded</span>
+        <strong>2002</strong>
+      </div>
+
+      <div class="profile-item">
+        <span>Headquarters</span>
+        <strong>Singapore</strong>
+      </div>
+
+      <div class="profile-item">
+        <span>Employees</span>
+        <strong>12,400</strong>
+      </div>
+
+      <div class="profile-item">
+        <span>FY2014 Revenue</span>
+        <strong>$8.2B</strong>
+      </div>
+
+      <div class="profile-item">
+        <span>Primary Markets</span>
+        <strong>APAC, Eastern Europe</strong>
+      </div>
+
+      <div class="profile-item">
+        <span>Core Segment</span>
+        <strong>Mid-Tier Smartphones</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- STORY BLOCK 1 -->
+<section class="story-block fade-in">
+  <div class="story-text">
+    <h3>The Rise</h3>
+    <p>
+      Orion Mobiles was founded in 2002 by hardware engineers who believed
+      operational discipline could outperform flashy innovation.
+      And for over a decade, it did.
+    </p>
+    <p>
+      By 2014, Orion held 28% market share with strong margins
+      and one of the highest customer retention rates in its segment.
+      It wasn’t glamorous : it was reliable.
+    </p>
+  </div>
+  <div class="story-visual">
+    <div class="metric-glow">
+      <span>28%</span>
+      <p>Peak Market Share</p>
+    </div>
+  </div>
+</section>
+<!-- REVENUE STRUCTURE -->
+<!-- REVENUE EVOLUTION -->
+<section class="revenue-evolution fade-in">
+
+  <div class="rev-container">
+
+    <h3>Revenue Evolution</h3>
+
+    <div class="rev-comparison">
+
+      <div class="rev-card peak">
+        <span>2014 (Peak)</span>
+        <strong>$8.2B</strong>
+        <p>Hardware-led growth cycle</p>
+      </div>
+
+      <div class="rev-card mid">
+        <span>2018</span>
+        <strong>$9.1B</strong>
+        <p>Expansion without ecosystem depth</p>
+      </div>
+
+      <div class="rev-card current">
+        <span>2025</span>
+        <strong>$5.8B</strong>
+        <p>Decline amid capital fragmentation</p>
+      </div>
+
+    </div>
+
+    <p class="rev-note">
+      Revenue contracted at a -6.3% CAGR over the last 5 years,
+      primarily driven by pricing pressure and ecosystem-driven customer migration.
+    </p>
+
+  </div>
+
+</section>
+
+<!-- STORY BLOCK 3 -->
+<section class="story-block fade-in">
+  <div class="story-text">
+    <h3>The Drift</h3>
+    <p>
+      Instead of choosing one direction, Orion chose many.
+      R&D initiatives expanded from 3 to 11.
+      Premium and value segments were pursued simultaneously.
+    </p>
+    <p>
+      Market share declined.
+      Retention eroded.
+      Margins compressed.
+      Not from incompetence — from fragmentation.
+    </p>
+  </div>
+  <div class="story-visual">
+    <canvas id="introDeclineChart"></canvas>
+  </div>
+</section>
+
+
+<!-- BOARD QUOTE -->
+<section class="quote-section fade-in">
+  <blockquote>
+    “Orion does not suffer from lack of capability.
+    It suffers from lack of prioritization.”
+  </blockquote>
+  <span>— Board Strategy Memo, Q4</span>
+</section>
+
+<!-- MANDATE -->
+<section class="story-mandate fade-in">
+  <h3>Your Mandate</h3>
+  <br>
+  <p>
+    You are appointed as Product Strategy Lead.
+    Not to invent new initiatives 
+    but to decide which ones deserve capital.
+  </p>
+  <p>
+    Engineering capacity is limited.
+    Trade-offs are unavoidable.
+    Coherence must be restored.
+  </p>
+<br><br>
+  <div class="intro-cta">
+    <button class="primary-btn" onclick="unlockMarket()">
+      Enter Market Intelligence →
+    </button>
+  </div>
+</section>
+
+</div>
+<div class="step-section hidden" id="section1">
+
+<div class="market-wrapper">
+
+<h2 class="market-title">Market Performance Overview</h2>
+
+<!-- KPI CARDS -->
+<div class="kpi-grid">
+
+  <div class="kpi-card">
+    <div class="kpi-label">Market Share</div>
+    <div class="kpi-value"><span class="counter" data-target="6">0</span>%</div>
+    <div class="kpi-sub">Peak: 28%</div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-label">EBITDA Margin</div>
+    <div class="kpi-value"><span class="counter" data-target="9">0</span>%</div>
+    <div class="kpi-sub">Previous: 18%</div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-label">Customer Retention</div>
+    <div class="kpi-value"><span class="counter" data-target="48">0</span>%</div>
+    <div class="kpi-sub">Decline from 82%</div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-label">Active R&D Initiatives</div>
+    <div class="kpi-value"><span class="counter" data-target="11">0</span></div>
+    <div class="kpi-sub">Previously: 3</div>
+  </div>
+
+</div>
+
+<!-- CHARTS -->
+<div class="chart-grid">
+
+  <div class="chart-card">
+    <div class="chart-title">Market Share Decline</div>
+    <canvas id="shareChart"></canvas>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">EBITDA Margin Trend</div>
+    <canvas id="marginChart"></canvas>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Strategic Fragmentation</div>
+    <canvas id="fragmentationChart"></canvas>
+  </div>
+
+</div>
+<!-- CONTEXT BOX -->
+<div class="market-context">
+  Orion is experiencing structural margin compression, declining retention,
+  and capital fragmentation across too many initiatives.
+  Strategic coherence is required before capital deployment.
+</div>
+
+<div style="text-align:center;margin-top:30px;">
+  <button class="primary-btn" onclick="unlockStrategy()">
+    Proceed to Strategy Formulation →
+  </button>
+</div>
+
+</div>
+</div>
+<div class="step-section hidden" id="section2">
+
+<div class="strategy-wrapper">
+
+<h2 class="strategy-title">Strategic Design Lab</h2>
+
+<!-- ================= PRIORITY ALLOCATION ================= -->
+
+<div class="strategy-block">
+
+<h3>1. Allocate 100 Strategic Capital Tokens</h3>
+
+<div id="tokenTotal" class="token-total">100 Tokens Remaining</div>
+
+<div class="token-grid">
+
+<div class="token-card" data-key="Margin">
+<h4>Margin Expansion</h4>
+<div class="token-controls">
+<button onclick="adjustToken('Margin',-1)">–</button>
+<input type="number" id="Margin" value="0" readonly>
+<button onclick="adjustToken('Margin',1)">+</button>
+</div>
+<div class="token-bar"><div class="token-fill" id="Margin-bar"></div></div>
+</div>
+
+<div class="token-card" data-key="Market">
+<h4>Market Share Growth</h4>
+<div class="token-controls">
+<button onclick="adjustToken('Market',-1)">–</button>
+<input type="number" id="Market" value="0" readonly>
+<button onclick="adjustToken('Market',1)">+</button>
+</div>
+<div class="token-bar"><div class="token-fill" id="Market-bar"></div></div>
+</div>
+
+<div class="token-card" data-key="Retention">
+<h4>Retention & Ecosystem</h4>
+<div class="token-controls">
+<button onclick="adjustToken('Retention',-1)">–</button>
+<input type="number" id="Retention" value="0" readonly>
+<button onclick="adjustToken('Retention',1)">+</button>
+</div>
+<div class="token-bar"><div class="token-fill" id="Retention-bar"></div></div>
+</div>
+
+<div class="token-card" data-key="Innovation">
+<h4>Innovation Leadership</h4>
+<div class="token-controls">
+<button onclick="adjustToken('Innovation',-1)">–</button>
+<input type="number" id="Innovation" value="0" readonly>
+<button onclick="adjustToken('Innovation',1)">+</button>
+</div>
+<div class="token-bar"><div class="token-fill" id="Innovation-bar"></div></div>
+</div>
+
+<div class="token-card" data-key="Efficiency">
+<h4>Operational Efficiency</h4>
+<div class="token-controls">
+<button onclick="adjustToken('Efficiency',-1)">–</button>
+<input type="number" id="Efficiency" value="0" readonly>
+<button onclick="adjustToken('Efficiency',1)">+</button>
+</div>
+<div class="token-bar"><div class="token-fill" id="Efficiency-bar"></div></div>
+</div>
+
+<div class="token-card" data-key="Risk">
+<h4>Risk Control</h4>
+<div class="token-controls">
+<button onclick="adjustToken('Risk',-1)">–</button>
+<input type="number" id="Risk" value="0" readonly>
+<button onclick="adjustToken('Risk',1)">+</button>
+</div>
+<div class="token-bar"><div class="token-fill" id="Risk-bar"></div></div>
+</div>
+
+</div>
+
+<div class="donut-container">
+<canvas id="priorityChart"></canvas>
+</div>
+
+</div>
+<!-- ================= ARCHETYPE ================= -->
+
+<div class="strategy-block">
+<h3>2. Select Strategic Identity</h3>
+
+<div class="archetype-grid">
+
+<div class="archetype-card" data-type="profit">Profit-Focused Turnaround</div>
+<div class="archetype-card" data-type="growth">Aggressive Growth Challenger</div>
+<div class="archetype-card" data-type="ecosystem">Platform Ecosystem Builder</div>
+<div class="archetype-card" data-type="stability">Stability & Risk Control</div>
+<div class="archetype-card" data-type="innovation">Innovation Differentiator</div>
+
+</div>
+</div>
+
+<!-- ================= TARGET SETTING ================= -->
+
+<div class="strategy-block">
+<h3>3. Set 12-Month Targets</h3>
+
+<div class="target-grid">
+
+<div>
+<label>Target EBITDA %</label>
+<input type="number" id="targetMargin">
+</div>
+
+<div>
+<label>Target Market Share %</label>
+<input type="number" id="targetMarket">
+</div>
+
+<div>
+<label>Target Retention %</label>
+<input type="number" id="targetRetention">
+</div>
+
+<div>
+<label>Max Acceptable Risk (1–10)</label>
+<input type="number" min="1" max="10" id="targetRisk">
+</div>
+
+</div>
+</div>
+
+<div style="text-align:center;margin-top:40px;">
+<button class="primary-btn" onclick="unlockAllocation()">
+Proceed to Capital Allocation →
+</button>
+</div>
+
+</div>
+</div>
+<div class="step-section hidden" id="section3">
+
+<div class="allocation-wrapper">
+
+<h2 class="strategy-title">Capital Allocation — RICE Prioritization</h2>
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+  <button class="primary-btn" onclick="addInitiativeRow()">+ Add Initiative</button>
+  <button class="primary-btn" onclick="openRiceModal()">What is RICE?</button>
+</div>
+
+<table class="rice-table">
+<thead>
+<tr>
+<th>Initiative</th>
+<th>Reach</th>
+<th>Impact</th>
+<th>Confidence (%)</th>
+<th>Effort</th>
+<th>RICE Score</th>
+<th>Remove</th>
+</tr>
+</thead>
+<tbody id="initiativeTableBody">
+</tbody>
+</table>
+
+<div class="portfolio-score">
+Total Portfolio RICE Score: <span id="totalRiceScore">0</span>
+</div>
+
+<div class="chart-container">
+<canvas id="riceChart"></canvas>
+</div>
+
+<div style="text-align:center;margin-top:40px;">
+<button class="primary-btn" onclick="submitSimulation()">
+Submit Final Allocation →
+</button>
+</div>
+
+</div>
+
+</div>
+<div class="step-section hidden" id="section4">
+
+<div class="reports-wrapper">
+
+<h2 class="reports-title">Strategic Performance Report</h2>
+
+<!-- SCORE SUMMARY -->
+<div class="score-summary">
+
+  <div class="score-card">
+    <span>Overall Score</span>
+    <strong id="finalScore">0</strong>
+  </div>
+
+  <div class="score-card">
+    <span>Executive Grade</span>
+    <strong id="finalGrade">-</strong>
+  </div>
+
+</div>
+
+<!-- STRATEGY SUMMARY TABLE -->
+<h3>Strategy Alignment Overview</h3>
+<table class="report-table" id="strategyTable"></table>
+
+<!-- TARGET VS PROJECTED -->
+<h3>Target vs Projected Outcomes</h3>
+<table class="report-table" id="projectionTable"></table>
+
+<!-- PERFORMANCE CHART -->
+<div class="report-chart">
+  <canvas id="performanceChart"></canvas>
+</div>
+
+<!-- EXECUTIVE VERDICT -->
+<div class="verdict-box">
+  <h3>Executive Verdict</h3>
+  <p id="verdictText"></p>
+</div>
+
+</div>
+
+</div>
+</div>
+<div class="leaderboard-section hidden" id="leaderboardSection">
+
+  <div class="reports-wrapper">
+    <h2 class="reports-title">Leaderboard</h2>
+
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboardTable"></tbody>
+    </table>
+
+  </div>
+
+</div>
+
+<script>
+
+/* ================= GLOBAL STATE ================= */
+
+let timerSeconds = 3600;
+let timerInterval;
+let selectedArchetype = null;
+let simulationSubmitted = false;
+let totalTokens = 100;
+let priorityChart;
+
+/* ================= INIT ================= */
+
+window.onload = function(){
+
+  initializeStepNavigation();
+
+  const user = localStorage.getItem("orionUser");
+
+  if(user){
+    loadUser();
+    loginModal.classList.add("hidden");
+    startTimer();
+
+    setTimeout(()=>{
+      document.getElementById("guidelinesModal")
+      .classList.remove("hidden");
+    },500);
+  }
+
+  initializePriorityChart();
+};
+function closeGuidelines(){
+
+  document.getElementById("guidelinesModal")
+  .classList.add("hidden");
+
+}
+
+/* ================= USER SYSTEM ================= */
+
+function startSimulation(){
+
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  if(!name || !email) return;
+
+  localStorage.setItem("orionUser", JSON.stringify({name,email}));
+  loadUser();
+  loginModal.classList.add("hidden");
+  startTimer();
+}
+
+function loadUser(){
+  const user = JSON.parse(localStorage.getItem("orionUser"));
+  if(!user) return;
+  userDisplay.innerText = user.name;
+  avatarInitial.innerText = user.name.charAt(0).toUpperCase();
+}
+
+function startTimer(){
+  timerInterval = setInterval(()=>{
+    if(timerSeconds <= 0){
+      clearInterval(timerInterval);
+      return;
+    }
+    timerSeconds--;
+    const m = Math.floor(timerSeconds/60);
+    const s = timerSeconds%60;
+    timer.innerText = `${m}:${s<10?'0':''}${s}`;
+  },1000);
+}
+
+/* ================= STEP NAVIGATION ================= */
+
+function initializeStepNavigation(){
+
+  const steps = document.querySelectorAll(".step");
+
+  steps.forEach((step,index)=>{
+    step.addEventListener("click",()=>{
+
+      if(simulationSubmitted) return;
+      if(step.classList.contains("locked")) return;
+
+      switchStep(index);
+    });
+  });
+}
+
+function switchStep(index){
+
+  const steps = document.querySelectorAll(".step");
+  const sections = document.querySelectorAll(".step-section");
+
+  steps.forEach(step=>step.classList.remove("active"));
+  steps[index].classList.add("active");
+
+  sections.forEach(section=>section.classList.add("hidden"));
+  sections[index].classList.remove("hidden");
+}
+
+function unlockStep(index){
+  const steps = document.querySelectorAll(".step");
+  steps[index].classList.remove("locked");
+}
+
+/* ================= INTRO → MARKET ================= */
+
+function unlockMarket(){
+  unlockStep(1);
+  switchStep(1);
+  setTimeout(animateCounters, 300);
+}
+
+/* ================= MARKET COUNTERS ================= */
+
+function animateCounters(){
+
+  const counters = document.querySelectorAll('.counter');
+
+  counters.forEach(counter=>{
+    const target = +counter.getAttribute('data-target');
+    const increment = target / 40;
+
+    function update(){
+      const current = +counter.innerText;
+
+      if(current < target){
+        counter.innerText = Math.ceil(current + increment);
+        setTimeout(update, 30);
+      } else {
+        counter.innerText = target;
+      }
+    }
+
+    update();
+  });
+}
+
+/* ================= CHARTS ================= */
+
+new Chart(document.getElementById("shareChart"),{
+type:"line",
+data:{
+labels:["2014","2018","2021","2023","2024"],
+datasets:[{
+label:"Market Share %",
+data:[28,21,14,9,6],
+borderColor:"#EF4444",
+backgroundColor:"rgba(239,68,68,0.15)",
+fill:true,
+tension:0.35,
+pointRadius:5,
+pointBackgroundColor:"#EF4444"
+}]
+},
+options:{
+responsive:true,
+plugins:{
+legend:{display:false},
+tooltip:{
+backgroundColor:"#111827",
+borderColor:"#1E293B",
+borderWidth:1
+}
+},
+scales:{
+x:{
+grid:{color:"#1E293B"},
+ticks:{color:"#94A3B8"}
+},
+y:{
+grid:{color:"#1E293B"},
+ticks:{color:"#94A3B8"}
+}
+}
+}
+});
+
+new Chart(document.getElementById("marginChart"),{
+type:"line",
+data:{
+labels:["2014","2018","2021","2023","2024"],
+datasets:[{
+label:"EBITDA %",
+data:[18,15,13,11,9],
+borderColor:"#F97316",
+backgroundColor:"rgba(249,115,22,0.15)",
+fill:true,
+tension:0.35,
+pointRadius:5,
+pointBackgroundColor:"#F97316"
+}]
+},
+options:{
+plugins:{
+legend:{display:false},
+tooltip:{
+backgroundColor:"#111827",
+borderColor:"#1E293B",
+borderWidth:1
+}
+},
+scales:{
+x:{
+grid:{color:"#1E293B"},
+ticks:{color:"#94A3B8"}
+},
+y:{
+grid:{color:"#1E293B"},
+ticks:{color:"#94A3B8"}
+}
+}
+}
+});
+
+new Chart(document.getElementById("fragmentationChart"),{
+type:"doughnut",
+data:{
+labels:["Core Focus","Fragmented Initiatives"],
+datasets:[{
+data:[3,11],
+backgroundColor:[
+"#3B82F6",
+"#8B5CF6"
+],
+borderWidth:0
+}]
+},
+options:{
+cutout:"70%",
+plugins:{
+legend:{
+position:"bottom",
+labels:{
+color:"#CBD5E1",
+padding:20
+}
+},
+tooltip:{
+backgroundColor:"#111827",
+borderColor:"#1E293B",
+borderWidth:1
+}
+}
+}
+});
+
+/* ================= MARKET → STRATEGY ================= */
+
+function unlockStrategy(){
+  unlockStep(2);
+  switchStep(2);
+}
+
+/* ================= PRIORITY DONUT ================= */
+
+function initializePriorityChart(){
+
+  priorityChart = new Chart(
+    document.getElementById("priorityChart"),
+    {
+      type:"doughnut",
+      data:{
+        labels:["Margin","Market","Retention","Innovation","Efficiency","Risk"],
+        datasets:[{
+          data:[0,0,0,0,0,0],
+          backgroundColor:[
+            "#3B82F6",
+            "#10B981",
+            "#F59E0B",
+            "#8B5CF6",
+            "#EF4444",
+            "#64748B"
+          ]
+        }]
+      },
+      options:{
+        plugins:{
+          legend:{position:"bottom"}
+        }
+      }
+    }
+  );
+}
+
+/* ================= TOKEN ALLOCATION ================= */
+
+function adjustToken(key,delta){
+
+  let input = document.getElementById(key);
+  let current = parseInt(input.value);
+
+  if(delta > 0 && totalTokens <= 0) return;
+  if(delta < 0 && current <= 0) return;
+
+  input.value = current + delta;
+  totalTokens -= delta;
+
+  updateTokens();
+}
+
+function updateTokens(){
+
+  let used = 0;
+  let data = [];
+
+  ["Margin","Market","Retention","Innovation","Efficiency","Risk"]
+  .forEach(key=>{
+    let val = parseInt(document.getElementById(key).value);
+    used += val;
+    data.push(val);
+    document.getElementById(key+"-bar").style.width = val+"%";
+  });
+
+  document.getElementById("tokenTotal").innerText =
+  (100-used)+" Tokens Remaining";
+
+  priorityChart.data.datasets[0].data = data;
+  priorityChart.update();
+}
+
+/* ================= ARCHETYPE ================= */
+
+document.querySelectorAll(".archetype-card").forEach(card=>{
+  card.addEventListener("click",()=>{
+    document.querySelectorAll(".archetype-card")
+    .forEach(c=>c.classList.remove("active"));
+    card.classList.add("active");
+    selectedArchetype = card.dataset.type;
+  });
+});
+
+/* ================= STRATEGY → ALLOCATION ================= */
+
+function unlockAllocation(){
+
+  let used = 0;
+
+  ["Margin","Market","Retention","Innovation","Efficiency","Risk"]
+  .forEach(key=>{
+    used += parseInt(document.getElementById(key).value);
+  });
+
+  if(used !== 100){
+    alert("You must allocate exactly 100 tokens.");
+    return;
+  }
+
+  if(!selectedArchetype){
+    alert("Select a strategic identity.");
+    return;
+  }
+
+  const margin = targetMargin.value;
+  const market = targetMarket.value;
+  const retention = targetRetention.value;
+  const risk = targetRisk.value;
+
+  if(!margin || !market || !retention || !risk){
+    alert("Complete all target fields.");
+    return;
+  }
+
+  localStorage.setItem("orionStrategy", JSON.stringify({
+    priorities: priorityChart.data.datasets[0].data,
+    archetype: selectedArchetype,
+    targets:{margin,market,retention,risk}
+  }));
+
+  unlockStep(3);
+  switchStep(3);
+}
+
+/* ================= FINAL SUBMIT ================= */
+
+function submitSimulation(){
+
+  if(simulationSubmitted) return;
+
+  collectAllocationData();
+
+  simulationSubmitted = true;
+
+  // Disable add button
+  const addBtn = document.querySelector(".allocation-wrapper button");
+  if(addBtn) addBtn.disabled = true;
+
+  // Disable all inputs & buttons in allocation
+  document.querySelectorAll("#initiativeTableBody input, #initiativeTableBody select, #initiativeTableBody button")
+  .forEach(el => el.disabled = true);
+
+  // Lock all steps
+  document.querySelectorAll(".step").forEach(step=>{
+    step.classList.add("locked");
+  });
+
+  // Unlock reports tab only
+  const steps = document.querySelectorAll(".step");
+  steps[4].classList.remove("locked");
+
+  
+  // Move to report section
+  switchStep(4);
+
+  // Generate report
+  generateReport();
+}
+/* ================= RICE INITIATIVES ================= */
+
+const initiatives = [
+{ name:"Premium Product Launch", pillar:"Margin" },
+{ name:"Emerging Market Expansion", pillar:"Market" },
+{ name:"Loyalty Ecosystem Program", pillar:"Retention" },
+{ name:"AI Camera Innovation", pillar:"Innovation" },
+{ name:"Supply Chain Optimization", pillar:"Efficiency" },
+{ name:"Cost Rationalization", pillar:"Margin" },
+{ name:"Subscription Services Model", pillar:"Retention" },
+{ name:"Retail Channel Expansion", pillar:"Market" },
+{ name:"Flagship Differentiation", pillar:"Innovation" },
+{ name:"Warranty Risk Reduction", pillar:"Risk" },
+{ name:"Cloud Ecosystem Integration", pillar:"Retention" },
+{ name:"Automation Manufacturing", pillar:"Efficiency" },
+{ name:"5G Feature Acceleration", pillar:"Market" },
+{ name:"Strategic Pricing Optimization", pillar:"Margin" }
+];
+
+let riceChart;
+let initiativeCount = 0;
+
+/* ================= INIT RICE CHART ================= */
+
+function initializeRiceChart(){
+
+riceChart = new Chart(
+document.getElementById("riceChart"),
+{
+type:"bar",
+data:{
+labels:[],
+datasets:[{
+label:"RICE Score",
+data:[],
+backgroundColor:"#3B82F6"
+}]
+},
+options:{
+plugins:{legend:{display:false}},
+scales:{
+y:{beginAtZero:true}
+}
+}
+}
+);
+}
+
+initializeRiceChart();
+
+/* ================= ADD ROW ================= */
+
+function addInitiativeRow(){
+
+const tbody = document.getElementById("initiativeTableBody");
+const row = document.createElement("tr");
+row.dataset.id = initiativeCount;
+
+let optionsHTML = initiatives.map(i =>
+`<option value="${i.name}">${i.name}</option>`
+).join("");
+
+row.innerHTML = `
+<td>
+<select onchange="updateRice()">
+${optionsHTML}
+</select>
+</td>
+
+<td><input type="number" min="0" value="0" onchange="updateRice()"></td>
+<td>
+<select onchange="updateRice()">
+<option value="0.25">0.25</option>
+<option value="0.5">0.5</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select>
+</td>
+<td><input type="number" min="0" max="100" value="100" onchange="updateRice()"></td>
+<td><input type="number" min="1" value="1" onchange="updateRice()"></td>
+<td class="rice-score">0</td>
+<td><button onclick="removeRow(this)">X</button></td>
+`;
+
+tbody.appendChild(row);
+initiativeCount++;
+
+updateRice();
+}
+
+/* ================= REMOVE ROW ================= */
+
+function removeRow(button){
+button.closest("tr").remove();
+updateRice();
+}
+
+/* ================= UPDATE RICE ================= */
+
+function updateRice(){
+
+const rows = document.querySelectorAll("#initiativeTableBody tr");
+
+let totalScore = 0;
+let labels = [];
+let data = [];
+
+rows.forEach(row=>{
+
+const cells = row.querySelectorAll("td");
+
+const name = cells[0].querySelector("select").value;
+const reach = parseFloat(cells[1].querySelector("input").value) || 0;
+const impact = parseFloat(cells[2].querySelector("select").value);
+const confidence = (parseFloat(cells[3].querySelector("input").value) || 0) / 100;
+const effort = parseFloat(cells[4].querySelector("input").value) || 1;
+
+const rice = (reach * impact * confidence) / effort;
+
+cells[5].innerText = rice.toFixed(2);
+
+totalScore += rice;
+labels.push(name);
+data.push(rice);
+});
+
+document.getElementById("totalRiceScore").innerText =
+totalScore.toFixed(2);
+
+riceChart.data.labels = labels;
+riceChart.data.datasets[0].data = data;
+riceChart.update();
+}
+
+/* ================= RICE MODAL ================= */
+
+function openRiceModal(){
+
+const modal = document.createElement("div");
+modal.className = "modal";
+
+modal.innerHTML = `
+<div class="modal-box">
+<h2>RICE Framework</h2>
+<p><strong>Reach:</strong> Number of users impacted per period.</p>
+<p><strong>Impact:</strong> Effect on key objectives (0.25 to 3 scale).</p>
+<p><strong>Confidence:</strong> Certainty level (0–100%).</p>
+<p><strong>Effort:</strong> Development effort required (person-months).</p>
+<p><strong>Formula:</strong> (Reach × Impact × Confidence) / Effort</p>
+<br>
+<button class="primary-btn" onclick="this.closest('.modal').remove()">Close</button>
+</div>
+`;
+
+document.body.appendChild(modal);
+}
+// Scroll animation
+const fadeElements = document.querySelectorAll(".fade-in");
+
+function checkFade(){
+  const trigger = window.innerHeight * 0.85;
+
+  fadeElements.forEach(el=>{
+    const top = el.getBoundingClientRect().top;
+    if(top < trigger){
+      el.classList.add("visible");
+    }
+  });
+}
+
+window.addEventListener("scroll", checkFade);
+window.addEventListener("load", checkFade);
+new Chart(document.getElementById("introDeclineChart"),{
+type:"line",
+data:{
+labels:["2014","2016","2018","2020","2022","2024"],
+datasets:[
+{
+label:"Market Share %",
+data:[28,25,18,14,9,6],
+borderColor:"#EF4444",
+tension:0.4
+}
+]
+},
+options:{
+plugins:{legend:{display:false}},
+scales:{y:{display:false}, x:{display:false}}
+}
+});
+new Chart(document.getElementById("revenueChart"),{
+type:"line",
+data:{
+labels:["2014","2018","2021","2023","2025"],
+datasets:[{
+data:[8.2,9.1,7.4,6.3,5.8],
+borderColor:"#3B82F6",
+tension:0.4
+}]
+},
+options:{
+plugins:{legend:{display:false}},
+scales:{y:{display:false},x:{display:false}}
+}
+});
+function generateReport(){
+
+const strategy = JSON.parse(localStorage.getItem("orionStrategy"));
+const allocation = JSON.parse(localStorage.getItem("orionAllocation"));
+
+if(!strategy || !allocation) return;
+
+// ---- BASELINE DATA ----
+const baseline = {
+margin: 9.2,        // EBITDA %
+market: 6.1,        // market share %
+retention: 48.3     // %
+};
+
+// ---- CALCULATE RICE TOTAL ----
+let totalRice = allocation.reduce((sum,i)=>sum + i.riceScore,0);
+
+// ---- STRATEGY ALIGNMENT ----
+let priorityWeights = strategy.priorities; // [Margin, Market, Retention, Innovation, Efficiency, Risk]
+
+let alignmentScore = 0;
+
+allocation.forEach(i=>{
+alignmentScore += (i.riceScore * priorityWeights[i.categoryIndex]) / 100;
+});
+
+alignmentScore = Math.min(30, alignmentScore / 50);
+
+// ---- TARGET REALISM ----
+let realismScore = 20;
+
+if(strategy.targets.margin > 20) realismScore -= 5;
+if(strategy.targets.market > 25) realismScore -= 5;
+if(strategy.targets.retention > 85) realismScore -= 5;
+
+// ---- CAPITAL EFFICIENCY ----
+let efficiencyScore = Math.min(30, totalRice / 40);
+
+// ---- RISK PENALTY ----
+let riskPenalty = strategy.targets.risk > 8 ? -10 : 0;
+
+// ---- FINAL SCORE ----
+let finalScore = Math.max(0,
+Math.round(alignmentScore + realismScore + efficiencyScore + riskPenalty)
+);
+
+document.getElementById("finalScore").innerText = finalScore;
+
+// ---- GRADE ----
+let grade = "D";
+if(finalScore >= 75) grade="A";
+else if(finalScore >= 60) grade="B";
+else if(finalScore >= 45) grade="C";
+
+document.getElementById("finalGrade").innerText = grade;
+
+// ---- TARGET VS PROJECTED ----
+let projected = {
+margin: baseline.margin,
+market: baseline.market,
+retention: baseline.retention
+};
+
+allocation.forEach(i => {
+
+const impact = initiativeImpact[i.name];
+
+if(!impact) return;
+
+const executionWeight = Math.min(1, i.riceScore / 50);
+
+projected.margin += impact.margin * executionWeight;
+projected.market += impact.market * executionWeight;
+projected.retention += impact.retention * executionWeight;
+
+});
+projected.margin = Math.min(projected.margin, 15);
+projected.market = Math.min(projected.market, 12);
+projected.retention = Math.min(projected.retention, 75);
+
+buildProjectionTable(strategy.targets, projected);
+buildPerformanceChart(baseline, strategy.targets, projected);
+generateVerdict(finalScore, grade, strategy, allocation, projected);
+saveToLeaderboard(finalScore);
+}
+function generateVerdict(score,grade,strategy,allocation,projected){
+
+let text="";
+
+if(grade==="A"){
+text="Your strategy demonstrates strong capital coherence. Initiative selection aligns with declared priorities, and projected outcomes suggest measurable improvement across financial and retention metrics.";
+}
+else if(grade==="B"){
+text="Your allocation reflects moderate strategic alignment. While targets are directionally sound, certain capital deployments dilute overall impact.";
+}
+else if(grade==="C"){
+text="Your strategy lacks focus. Capital fragmentation reduces projected gains and introduces execution risk.";
+}
+else{
+text="Strategic misalignment is evident. Priority declaration and initiative selection conflict, resulting in inefficient capital deployment.";
+}
+
+text += " Projected EBITDA margin: " + projected.margin.toFixed(1) + "%.";
+text += " Projected market share: " + projected.market.toFixed(1) + "%.";
+text += " Projected retention: " + projected.retention.toFixed(1) + "%.";
+
+document.getElementById("verdictText").innerText = text;
+
+}
+
+function collectAllocationData(){
+
+  const rows = document.querySelectorAll("#initiativeTableBody tr");
+  let allocation = [];
+
+  rows.forEach(row => {
+
+    const cells = row.querySelectorAll("td");
+
+    const name = cells[0].querySelector("select").value;
+    const reach = parseFloat(cells[1].querySelector("input").value) || 0;
+    const impact = parseFloat(cells[2].querySelector("select").value);
+    const confidence = (parseFloat(cells[3].querySelector("input").value) || 0) / 100;
+    const effort = parseFloat(cells[4].querySelector("input").value) || 1;
+
+    const riceScore = (reach * impact * confidence) / effort;
+
+    const initiativeMeta = initiatives.find(i => i.name === name);
+
+    const categoryIndex = [
+      "Margin",
+      "Market",
+      "Retention",
+      "Innovation",
+      "Efficiency",
+      "Risk"
+    ].indexOf(initiativeMeta.pillar);
+
+    allocation.push({
+      name,
+      reach,
+      impact,
+      confidence,
+      effort,
+      riceScore,
+      categoryIndex
+    });
+
+  });
+
+  localStorage.setItem("orionAllocation", JSON.stringify(allocation));
+}
+function buildProjectionTable(targets, projected){
+
+  const table = document.getElementById("projectionTable");
+
+  table.innerHTML = `
+    <tr>
+      <th>Metric</th>
+      <th>Target</th>
+      <th>Projected</th>
+    </tr>
+
+    <tr>
+      <td>EBITDA Margin</td>
+      <td>${targets.margin}%</td>
+      <td>${projected.margin.toFixed(1)}%</td>
+    </tr>
+
+    <tr>
+      <td>Market Share</td>
+      <td>${targets.market}%</td>
+      <td>${projected.market.toFixed(1)}%</td>
+    </tr>
+
+    <tr>
+      <td>Retention</td>
+      <td>${targets.retention}%</td>
+      <td>${projected.retention.toFixed(1)}%</td>
+    </tr>
+  `;
+}
+function buildPerformanceChart(baseline, targets, projected){
+
+  const ctx = document.getElementById("performanceChart");
+
+  new Chart(ctx,{
+    type:"bar",
+    data:{
+      labels:["Margin","Market","Retention"],
+      datasets:[
+        {
+          label:"Baseline",
+          data:[baseline.margin, baseline.market, baseline.retention],
+          backgroundColor:"#64748B"
+        },
+        {
+          label:"Target",
+          data:[targets.margin, targets.market, targets.retention],
+          backgroundColor:"#F59E0B"
+        },
+        {
+          label:"Projected",
+          data:[projected.margin, projected.market, projected.retention],
+          backgroundColor:"#3B82F6"
+        }
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{position:"bottom"}
+      }
+    }
+  });
+}
+function saveToLeaderboard(score){
+
+  const user = JSON.parse(localStorage.getItem("orionUser"));
+  if(!user) return;
+
+  let leaderboard = JSON.parse(localStorage.getItem("orionLeaderboard")) || [];
+
+  leaderboard.push({
+    name: user.name,
+    score: score
+  });
+
+  leaderboard.sort((a,b)=> b.score - a.score);
+
+  localStorage.setItem("orionLeaderboard", JSON.stringify(leaderboard));
+}
+function renderLeaderboard(){
+
+  const tbody = document.getElementById("leaderboardTable");
+  tbody.innerHTML = "";
+
+  let leaderboard = JSON.parse(localStorage.getItem("orionLeaderboard")) || [];
+
+  leaderboard.sort((a,b)=> b.score - a.score);
+
+  leaderboard.forEach((entry,index)=>{
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${index+1}</td>
+      <td>${entry.name}</td>
+      <td>${entry.score}</td>
+    `;
+
+    tbody.appendChild(row);
+
+  });
+}
+function showLeaderboard(el){
+
+  document.querySelectorAll(".main-nav div")
+  .forEach(tab=>tab.classList.remove("active"));
+
+  el.classList.add("active");
+
+  document.querySelector(".content").classList.add("hidden");
+  document.getElementById("leaderboardSection").classList.remove("hidden");
+
+  renderLeaderboard();
+}
+
+function showGameArena(el){
+
+  document.querySelectorAll(".main-nav div")
+  .forEach(tab=>tab.classList.remove("active"));
+
+  el.classList.add("active");
+
+  document.querySelector(".content").classList.remove("hidden");
+  document.getElementById("leaderboardSection").classList.add("hidden");
+}
+const initiativeImpact = {
+
+"Premium Product Launch": {margin:0.8, market:0.7, retention:1.2},
+
+"Emerging Market Expansion": {margin:-0.3, market:1.6, retention:0.5},
+
+"Loyalty Ecosystem Program": {margin:0.2, market:0.4, retention:4.0},
+
+"AI Camera Innovation": {margin:0.5, market:0.9, retention:1.4},
+
+"Supply Chain Optimization": {margin:1.6, market:0.1, retention:0.3},
+
+"Cost Rationalization": {margin:1.3, market:-0.2, retention:-0.1},
+
+"Subscription Services Model": {margin:0.6, market:0.2, retention:3.5},
+
+"Retail Channel Expansion": {margin:0.1, market:1.4, retention:0.7},
+
+"Flagship Differentiation": {margin:0.7, market:0.8, retention:1.2},
+
+"Warranty Risk Reduction": {margin:0.4, market:0, retention:1.0},
+
+"Cloud Ecosystem Integration": {margin:0.3, market:0.4, retention:2.8},
+
+"Automation Manufacturing": {margin:1.4, market:0, retention:0.2},
+
+"5G Feature Acceleration": {margin:0.2, market:1.0, retention:0.8},
+
+"Strategic Pricing Optimization": {margin:1.1, market:-0.3, retention:0.4}
+
+};
+</script>
+</body>
+</html>
